@@ -1,0 +1,11 @@
+--- a/node_modules/psl/index.js
++++ b/node_modules/psl/index.js
+@@ -2,7 +2,7 @@
+ 'use strict';
+
+
+-var Punycode = require('punycode');
++var Punycode = require('punycode/');
+
+
+ var internals = {};

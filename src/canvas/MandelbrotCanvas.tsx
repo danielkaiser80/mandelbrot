@@ -1,32 +1,31 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import { getColorFromNumber } from "./color-util.ts";
+import getIterations from "./calculator.ts";
 
 const MandelbrotCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const width = 450;
+  const height = 350;
 
   useEffect(() => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       if (ctx) {
-        // Draw a point
-        ctx.fillStyle = "red";
-        ctx.fillRect(10, 10, 1, 1);
+        for (let i = 0; i < width; i++) {
+          for (let j = 0; j < height; j++) {
+            const c1 = 4 * ((i - width / 2) / width);
+            const c2 = 4 * ((j - height / 2) / height);
 
-        // Draw a line
-        ctx.strokeStyle = "blue";
-        ctx.beginPath();
-        ctx.moveTo(20, 20);
-        ctx.lineTo(100, 100);
-        ctx.stroke();
-
-        // Draw a rectangle
-        ctx.fillStyle = "green";
-        ctx.fillRect(50, 50, 30, 30);
+            ctx.fillStyle = getColorFromNumber(getIterations(c1, c2));
+            ctx.fillRect(i, j, 1, 1);
+          }
+        }
       }
     }
   }, []);
 
-  return <canvas ref={canvasRef} width={500} height={500} />;
+  return <canvas ref={canvasRef} width={width} height={height} />;
 };
 
 export default MandelbrotCanvas;
