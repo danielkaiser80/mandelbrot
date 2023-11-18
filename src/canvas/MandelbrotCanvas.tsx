@@ -6,8 +6,11 @@ const MandelbrotCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const width = 450;
   const height = 350;
+  const drawn = useRef<boolean>();
+  drawn.current = false;
 
   useEffect(() => {
+    if (drawn.current) return;
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
@@ -21,6 +24,8 @@ const MandelbrotCanvas: React.FC = () => {
             ctx.fillRect(i, j, 1, 1);
           }
         }
+
+        drawn.current = true;
       }
     }
   }, []);
