@@ -18,7 +18,12 @@ const colors = [
   "lightgray",
 ];
 
-export const getColorFromNumber = (index: number): string => {
-  const colorIndex = Math.min(index, colors.length - 1);
+export const MAX_COLOR = colors.length - 1;
+
+export const getColorFromNumber = (
+  index: number,
+  maxColor?: number,
+): string => {
+  const colorIndex = Math.min(index, maxColor ?? MAX_COLOR);
   return colors[colorIndex];
 };
