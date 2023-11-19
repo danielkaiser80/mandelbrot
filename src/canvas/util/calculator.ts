@@ -1,5 +1,5 @@
-export const MAX_ITERATIONS = 64;
-const getIterations = (c1: number, c2: number) => {
+const MAX_ITERATIONS = 64;
+const getIterations = ([c1, c2]: [number, number]) => {
   let z1 = 0,
     z2 = 0,
     n = 1;
@@ -9,4 +9,15 @@ const getIterations = (c1: number, c2: number) => {
   return n;
 };
 
-export default getIterations;
+const getStartValues = (
+  i: number,
+  width: number,
+  j: number,
+  height: number,
+): [number, number] => {
+  const c1 = 4 * ((i - width / 2) / width);
+  const c2 = 4 * ((j - height / 2) / height);
+  return [c1, c2];
+};
+
+export default { getIterations, getStartValues, MAX_ITERATIONS };

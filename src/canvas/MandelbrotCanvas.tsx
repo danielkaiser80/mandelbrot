@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getColorFromNumber, MAX_COLOR } from "./util/color-util.ts";
-import getIterations from "./util/calculator.ts";
+import Calculator from "./util/calculator.ts";
 import {
   Button,
   Card,
@@ -25,10 +25,11 @@ const MandelbrotCanvas: React.FC = () => {
       if (ctx) {
         for (let i = 0; i < width; i++) {
           for (let j = 0; j < height; j++) {
-            const c1 = 4 * ((i - width / 2) / width);
-            const c2 = 4 * ((j - height / 2) / height);
-
-            ctx.fillStyle = getColorFromNumber(getIterations(c1, c2), maxColor);
+            const c = Calculator.getStartValues(i, width, j, height);
+            ctx.fillStyle = getColorFromNumber(
+              Calculator.getIterations(c),
+              maxColor,
+            );
             ctx.fillRect(i, j, 1, 1);
           }
         }
