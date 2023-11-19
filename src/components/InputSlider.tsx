@@ -59,7 +59,7 @@ const InputSlider = ({
       <Grid container spacing={4} alignItems="center">
         <Grid item xs>
           <Slider
-            value={typeof value === "number" ? value : minValue}
+            value={value}
             onChange={handleSliderChange}
             aria-labelledby="input-slider"
             valueLabelDisplay="auto"
