@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getColorFromNumber, MAX_COLOR } from "./color-util.ts";
-import getIterations from "./calculator.ts";
+import { getColorFromNumber, MAX_COLOR } from "./util/color-util.ts";
+import getIterations from "./util/calculator.ts";
 import {
   Button,
   Card,
