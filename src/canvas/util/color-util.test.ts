@@ -1,5 +1,4 @@
 import { colors, getColorFromNumber, MAX_COLOR } from "./color-util.ts";
-import { describe } from "vitest";
 
 describe(getColorFromNumber, () => {
   test("returns black for index 0", () => {

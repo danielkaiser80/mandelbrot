@@ -1,5 +1,4 @@
 import { drawMandelbrot } from "./DrawMandelbrot.ts";
-import { expect, vi } from "vitest";
 import { CanvasRenderingContext2DEvent } from "jest-canvas-mock";
 import { groupedMap } from "./GroupedMap.ts";
 

@@ -1,6 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import InputSlider from "./InputSlider";
-import { describe } from "vitest";
 
 describe(InputSlider, () => {
   test("renders InputSlider component with default values", () => {
