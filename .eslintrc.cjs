@@ -24,11 +24,24 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
   },
   settings: {
     react: {
       version: "detect",
     },
   },
+  overrides: [
+    {
+      files: ["**/*.test.js", "**/*.spec.js", "**/*.test.ts", "**/*.spec.ts"],
+      plugins: ['jest'],
+      rules: {
+        // Disable rules for test scope, which would fail the tests either way
+        "@typescript-eslint/no-non-null-assertion": "off",
+        // you should turn the original rule off *only* for test files
+        '@typescript-eslint/unbound-method': 'off',
+        'jest/unbound-method': 'error',
+      },
+    },
+  ],
 };

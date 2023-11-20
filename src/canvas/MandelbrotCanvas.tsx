@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getColorFromNumber, MAX_COLOR } from "./util/color-util.ts";
-import Calculator from "./util/calculator.ts";
+import { MAX_COLOR } from "./util/color-util.ts";
 import {
   Button,
   Card,
@@ -9,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import InputSlider from "../components/InputSlider.tsx";
+import { drawMandelbrot } from "./DrawMandelbrot.ts";
 
 const MandelbrotCanvas: React.FC = () => {
   const [maxColor, setMaxColor] = useState(MAX_COLOR);
@@ -21,21 +21,8 @@ const MandelbrotCanvas: React.FC = () => {
     if (!draw) return;
     if (canvasRef.current) {
       const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        for (let i = 0; i < width; i++) {
-          for (let j = 0; j < height; j++) {
-            const c = Calculator.getStartValues(i, width, j, height);
-            ctx.fillStyle = getColorFromNumber(
-              Calculator.getIterations(c),
-              maxColor,
-            );
-            ctx.fillRect(i, j, 1, 1);
-          }
-        }
-
-        setDraw(false);
-      }
+      drawMandelbrot({ canvas, width, height, maxColor });
+      setDraw(false);
     }
   }, [draw, maxColor]);
 
