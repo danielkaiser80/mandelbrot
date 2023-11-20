@@ -75,7 +75,10 @@ describe(InputSlider, () => {
     expect(handleChange).toHaveBeenCalledWith(0);
   });
 
-  test("handles input value exceeding max value correctly", () => {
+  test.each([
+    ["min", "-10", 0],
+    ["max", "60", 50],
+  ])("handles input value exceeding %s value correctly", (_, input, output) => {
     const handleChange = vi.fn();
     render(
       <InputSlider
@@ -88,11 +91,11 @@ describe(InputSlider, () => {
 
     // Simulate entering a value exceeding max value and blur
     fireEvent.change(screen.getByRole("spinbutton"), {
-      target: { value: "60" },
+      target: { value: input },
     });
     fireEvent.blur(screen.getByRole("spinbutton"));
 
     // Ensure handleChange function is called with the maxValue
-    expect(handleChange).toHaveBeenCalledWith(50);
+    expect(handleChange).toHaveBeenCalledWith(output);
   });
 });
