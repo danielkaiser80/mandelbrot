@@ -28,6 +28,7 @@ describe("MandelbrotCanvas", () => {
         width,
         height,
         maxColor: MAX_COLOR,
+        type: "Mandelbrot",
       }),
     );
 
@@ -44,6 +45,7 @@ describe("MandelbrotCanvas", () => {
         width,
         height,
         maxColor,
+        type: "Mandelbrot",
       }),
     );
   });
@@ -58,6 +60,27 @@ describe("MandelbrotCanvas", () => {
     fireEvent.click(radioButtonJulia);
 
     // we get a label and a span, this is by design
-    expect(screen.getAllByText(expectedText)[0]).toBeInTheDocument();
+    const allByText = screen.getAllByText(expectedText);
+    expect(allByText[0]).toBeInTheDocument();
+
+    const input1 = screen.getByLabelText("c1");
+    fireEvent.change(input1, { target: { value: 0.2 } });
+
+    const input2 = screen.getByLabelText("c2");
+    fireEvent.change(input2, { target: { value: -0.2 } });
+
+    // Trigger Redraw button click
+    fireEvent.click(screen.getByText("Redraw"));
+
+    // Verify that drawMandelbrot is called with the correct parameters
+    expect(DrawMandelbrotModule.drawMandelbrot).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: 450,
+        height: 350,
+        maxColor: MAX_COLOR,
+        type: "Julia",
+        cStart: [0.2, -0.2],
+      }),
+    );
   });
 });

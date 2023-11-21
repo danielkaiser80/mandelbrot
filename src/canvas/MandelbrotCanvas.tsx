@@ -89,7 +89,6 @@ const MandelbrotCanvas: FC = () => {
                 }}
                 inputProps={{
                   type: "number",
-                  "aria-labelledby": "input-slider",
                 }}
               />
               <TextField
@@ -103,7 +102,6 @@ const MandelbrotCanvas: FC = () => {
                 }}
                 inputProps={{
                   type: "number",
-                  "aria-labelledby": "input-slider",
                 }}
               />
             </Box>
