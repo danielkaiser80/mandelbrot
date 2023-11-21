@@ -1,6 +1,6 @@
 import { drawMandelbrot } from "./DrawMandelbrot.ts";
 import { CanvasRenderingContext2DEvent } from "jest-canvas-mock";
-import { groupedMap } from "./GroupedMap.ts";
+import { groupedMap } from "./util/grouped-map.ts";
 
 describe("drawMandelbrot", () => {
   const width = 2;
@@ -11,7 +11,7 @@ describe("drawMandelbrot", () => {
     const canvas = document.createElement("canvas");
     document.body.appendChild(canvas);
 
-    drawMandelbrot({ canvas, width, height, maxColor });
+    drawMandelbrot({ type: "Mandelbrot", canvas, width, height, maxColor });
 
     const ctx: CanvasRenderingContext2D & {
       __getEvents: () => CanvasRenderingContext2DEvent[];
@@ -47,7 +47,14 @@ describe("drawMandelbrot", () => {
       },
     } as HTMLCanvasElement;
 
-    drawMandelbrot({ canvas, width, height, maxColor });
+    drawMandelbrot({
+      type: "Julia",
+      canvas,
+      width,
+      height,
+      maxColor,
+      cStart: [0, 0],
+    });
     expect(contextIdMock).toBeCalledWith("2d");
   });
 });

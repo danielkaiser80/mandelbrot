@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { MAX_COLOR } from "./util/color-util.ts";
 import {
   Box,
@@ -6,15 +6,16 @@ import {
   Card,
   CardActions,
   CardContent,
+  TextField,
   Typography,
 } from "@mui/material";
 import InputSlider from "../components/InputSlider.tsx";
-import { drawMandelbrot } from "./DrawMandelbrot.ts";
+import { drawMandelbrot, DrawMandelbrotParams } from "./DrawMandelbrot.ts";
 import RadioButtonsGroup from "../components/RadioButtonsGroup.tsx";
 
-type FractalType = "Mandelbrot" | "Julia";
+export type FractalType = "Mandelbrot" | "Julia";
 
-const MandelbrotCanvas: React.FC = () => {
+const MandelbrotCanvas: FC = () => {
   const [maxColor, setMaxColor] = useState(MAX_COLOR);
   const [draw, setDraw] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -22,15 +23,25 @@ const MandelbrotCanvas: React.FC = () => {
   const height = 350;
 
   const [fractalType, setFractalType] = useState<FractalType>("Mandelbrot");
+  const [c1, setC1] = useState(0);
+  const [c2, setC2] = useState(0);
 
   useEffect(() => {
     if (!draw) return;
     if (canvasRef.current) {
       const canvas = canvasRef.current;
-      drawMandelbrot({ canvas, width, height, maxColor });
+      const drawMandelbrotParams = {
+        type: fractalType,
+        canvas,
+        width,
+        height,
+        maxColor,
+        ...(fractalType === "Julia" && { cStart: [c1, c2] }),
+      } as DrawMandelbrotParams;
+      drawMandelbrot(drawMandelbrotParams);
       setDraw(false);
     }
-  }, [draw, maxColor]);
+  }, [c1, c2, draw, fractalType, maxColor]);
 
   return (
     <Card>
@@ -65,7 +76,38 @@ const MandelbrotCanvas: React.FC = () => {
             heading="Choose the desired fractal!"
           />
 
-          {fractalType === "Julia" && <Box>For Julia only...</Box>}
+          {fractalType === "Julia" && (
+            <Box>
+              <TextField
+                sx={{ marginTop: 1, marginBottom: 1, marginRight: 1 }}
+                value={c1}
+                label="c1"
+                size="small"
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  const data = event.target.value;
+                  setC1(Number(data));
+                }}
+                inputProps={{
+                  type: "number",
+                  "aria-labelledby": "input-slider",
+                }}
+              />
+              <TextField
+                sx={{ marginTop: 1, marginBottom: 1 }}
+                value={c2}
+                label="c2"
+                size="small"
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  const data = event.target.value;
+                  setC2(Number(data));
+                }}
+                inputProps={{
+                  type: "number",
+                  "aria-labelledby": "input-slider",
+                }}
+              />
+            </Box>
+          )}
 
           <InputSlider
             description="Number of colors"

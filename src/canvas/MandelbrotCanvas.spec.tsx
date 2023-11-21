@@ -50,13 +50,14 @@ describe("MandelbrotCanvas", () => {
 
   test("changing to 'Julia' shows extra parameters which need to be set", () => {
     const { queryByText } = render(<MandelbrotCanvas />);
-    const expectedText = "For Julia only...";
+    const expectedText = "c1";
     expect(queryByText(expectedText)).toBeNull();
 
     // Find and interact with the radio button
     const radioButtonJulia = screen.getByText("Julia");
     fireEvent.click(radioButtonJulia);
 
-    expect(screen.getByText(expectedText)).toBeInTheDocument();
+    // we get a label and a span, this is by design
+    expect(screen.getAllByText(expectedText)[0]).toBeInTheDocument();
   });
 });

@@ -1,10 +1,41 @@
-const MAX_ITERATIONS = 64;
-const getIterations = ([c1, c2]: [number, number]) => {
-  let z1 = 0,
-    z2 = 0,
-    n = 1;
-  for (; z1 * z1 + z2 * z2 <= 4 && n < MAX_ITERATIONS; n++) {
-    [z1, z2] = [z1 * z1 - z2 * z2 + c1, 2 * z1 * z2 + c2];
+import { FractalType } from "../MandelbrotCanvas.tsx";
+
+export const MAX_ITERATIONS = 64;
+
+interface CommonParams {
+  type: FractalType;
+  i: number;
+  width: number;
+  j: number;
+  height: number;
+}
+
+interface MandelbrotParams extends CommonParams {
+  type: "Mandelbrot";
+}
+interface JuliaParams extends CommonParams {
+  cStart: [number, number];
+  type: "Julia";
+}
+
+export type Params = MandelbrotParams | JuliaParams;
+
+const getIterations = (params: Params) => {
+  const { type, i, width, j, height } = params;
+  let c: [number, number];
+  let z: [number, number];
+
+  if (type === "Mandelbrot") {
+    c = getStartValues(i, width, j, height);
+    z = [0, 0];
+  } else {
+    c = params.cStart;
+    z = getStartValues(i, width, j, height);
+  }
+
+  let n = 1;
+  for (; z[0] * z[0] + z[1] * z[1] <= 4 && n < MAX_ITERATIONS; n++) {
+    [z[0], z[1]] = [z[0] * z[0] - z[1] * z[1] + c[0], 2 * z[0] * z[1] + c[1]];
   }
   return n;
 };
@@ -15,9 +46,9 @@ const getStartValues = (
   j: number,
   height: number,
 ): [number, number] => {
-  const c1 = 4 * ((i - width / 2) / width);
-  const c2 = 4 * ((j - height / 2) / height);
-  return [c1, c2];
+  const first = 4 * ((i - width / 2) / width);
+  const second = 4 * ((j - height / 2) / height);
+  return [first, second];
 };
 
-export default { getIterations, getStartValues, MAX_ITERATIONS };
+export default getIterations;

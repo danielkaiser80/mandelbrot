@@ -1,26 +1,45 @@
+import type { Params } from "./util/calculator.ts";
 import { getColorFromNumber } from "./util/color-util.ts";
-import Calculator from "./util/calculator.ts";
+import getIterations from "./util/calculator.ts";
+import { FractalType } from "./MandelbrotCanvas.tsx";
 
-interface DrawMandelbrotParams {
+interface CommonParams {
+  type: FractalType;
   canvas: HTMLCanvasElement;
   width: number;
   height: number;
   maxColor: number;
 }
 
-export const drawMandelbrot = ({
-  canvas,
-  width,
-  height,
-  maxColor,
-}: DrawMandelbrotParams): void => {
+interface MandelbrotParams extends CommonParams {
+  type: "Mandelbrot";
+}
+
+interface JuliaParams extends CommonParams {
+  cStart: [number, number];
+  type: "Julia";
+}
+
+export type DrawMandelbrotParams = MandelbrotParams | JuliaParams;
+
+export const drawMandelbrot = (
+  drawMandelbrotParams: DrawMandelbrotParams,
+): void => {
+  const { type, canvas, width, height, maxColor } = drawMandelbrotParams;
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
   for (let i = 0; i < width; i++) {
     for (let j = 0; j < height; j++) {
-      const c = Calculator.getStartValues(i, width, j, height);
-      ctx.fillStyle = getColorFromNumber(Calculator.getIterations(c), maxColor);
+      const params = {
+        type,
+        width,
+        height,
+        ...(type === "Julia" && { cStart: drawMandelbrotParams.cStart }),
+        i,
+        j,
+      } as Params;
+      ctx.fillStyle = getColorFromNumber(getIterations(params), maxColor);
       ctx.fillRect(i, j, 1, 1);
     }
   }
