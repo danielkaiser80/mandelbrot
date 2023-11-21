@@ -11,7 +11,7 @@ vi.mock("./DrawMandelbrot", () => ({
 describe("MandelbrotCanvas", () => {
   test("renders MandelbrotCanvas component", () => {
     render(<MandelbrotCanvas />);
-    expect(screen.getByText("Choose your settings...")).toBeInTheDocument();
+    expect(screen.getByText("Settings...")).toBeInTheDocument();
   });
 
   test("clicking Redraw button triggers drawMandelbrot with the correct parameters", () => {
@@ -32,8 +32,8 @@ describe("MandelbrotCanvas", () => {
     );
 
     // Find and interact with the input field
-    const inputField = screen.getAllByRole("spinbutton");
-    fireEvent.change(inputField[0], { target: { value: "10" } }); // Change the value as needed
+    const inputField = screen.getByRole("spinbutton");
+    fireEvent.change(inputField, { target: { value: "10" } }); // Change the value as needed
 
     // Trigger Redraw button click
     fireEvent.click(screen.getByText("Redraw"));
@@ -46,5 +46,17 @@ describe("MandelbrotCanvas", () => {
         maxColor,
       }),
     );
+  });
+
+  test("changing to 'Julia' shows extra parameters which need to be set", () => {
+    const { queryByText } = render(<MandelbrotCanvas />);
+    const expectedText = "For Julia only...";
+    expect(queryByText(expectedText)).toBeNull();
+
+    // Find and interact with the radio button
+    const radioButtonJulia = screen.getByText("Julia");
+    fireEvent.click(radioButtonJulia);
+
+    expect(screen.getByText(expectedText)).toBeInTheDocument();
   });
 });

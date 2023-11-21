@@ -5,17 +5,17 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { ChangeEvent, useState } from "react";
 
-interface RadioButtonsGroupProps {
+interface RadioButtonsGroupProps<T extends string> {
   heading: string;
-  values: string[];
-  handleChange: (newValue: string) => void;
+  values: T[];
+  handleChange: (newValue: T) => void;
 }
 
-const RadioButtonsGroup = ({
+const RadioButtonsGroup = <T extends string>({
   heading,
   values,
   handleChange,
-}: RadioButtonsGroupProps) => {
+}: RadioButtonsGroupProps<T>) => {
   const [value, setValue] = useState(values[0]);
   if (values.length === 0) return <></>;
 
@@ -28,8 +28,9 @@ const RadioButtonsGroup = ({
         name="radio-buttons-group"
         value={value}
         onChange={(_event: ChangeEvent<HTMLInputElement>, value: string) => {
-          setValue(value);
-          handleChange(value);
+          const castValue = value as T;
+          setValue(castValue);
+          handleChange(castValue);
         }}
       >
         <>
